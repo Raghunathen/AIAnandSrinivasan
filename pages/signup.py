@@ -29,14 +29,21 @@ def create(title, credentials_file='credentials.json'):
             credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets']
         )
         service = build("sheets", "v4", credentials=credentials)
-        
-        spreadsheet = {"properties": {"title": title}}
+
+        # Create a new spreadsheet
+        spreadsheet = {
+            "properties": {"title": title},
+            "sheets": [
+                {"properties": {"title": "profit"}},
+                {"properties": {"title": "loss"}}
+            ]
+        }
         spreadsheet = (
             service.spreadsheets()
             .create(body=spreadsheet, fields="spreadsheetId")
             .execute()
         )
-        
+
         print(f"Spreadsheet ID: {spreadsheet.get('spreadsheetId')}")
         return spreadsheet.get("spreadsheetId")
     except Exception as error:
