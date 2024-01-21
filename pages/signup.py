@@ -78,6 +78,7 @@ if a:
     append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "A", [[loginid]])
     append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "B", [[password]])
     append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "C", [[create(loginid)]])
+    st.balloons()
     st.write("Signed up, redirecting to login..")
-    time.sleep(1)
+    time.sleep(2)
     st.switch_page('main.py')
