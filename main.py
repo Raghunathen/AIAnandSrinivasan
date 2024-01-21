@@ -107,9 +107,9 @@ if a:
             st.session_state['person_url'] = get_value_at_cell(spreadsheet_id, sheet_name, row_number, "C")
             st.switch_page("pages/expense.py")
         else:
-            st.write("Wrong Password")
+            st.toast("Wrong Password")
     else:
-        st.write("username doesnt exist, signup")
+        st.toast("username doesnt exist, signup")
         print("Target value not found in the specified column.")
 if b:
     st.switch_page("pages/signup.py")

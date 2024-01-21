@@ -81,11 +81,53 @@ def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
     
     print('Appended values successfully.')
 
+def is_value_in_column(spreadsheet_id, sheet_name, column_name, target_value):
+    credentials_file ='credentials.json'
+    # Load Google Sheets API credentials
+    credentials = service_account.Credentials.from_service_account_file(
+        credentials_file,
+        scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+    )
+
+    # Build the Google Sheets API service
+    service = build('sheets', 'v4', credentials=credentials)
+
+    # Define the range for the specified column
+    range_name = f"{sheet_name}!{column_name}:{column_name}"
+
+    try:
+        # Get data from the specified column
+        result = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheet_id,
+            range=range_name
+        ).execute()
+        values_in_column = result.get('values', [])
+
+        # Check if the target value is in the specified column
+        return [target_value] in values_in_column
+    except Exception as e:
+        print(f"Error reading data from Google Spreadsheet: {e}")
+        return False
+
+def is_password_standard(password):
+    if len(password) < 8:
+        return False
+    if not any(char.isdigit() for char in password):
+        return False
+    return True
+    
 if a:
-    append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "A", [[loginid]])
-    append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "B", [[password]])
-    append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "C", [[create(loginid)]])
-    st.balloons()
-    st.write("Signed up, redirecting to login..")
-    time.sleep(2)
-    st.switch_page('main.py')
+    if is_value_in_column("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", "Sheet1", "A", loginid):
+        st.toast("Login ID EXISTS, Try a different one")
+    else:
+        if is_password_standard(password):
+            
+            append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "A", [[loginid]])
+            append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "B", [[password]])
+            append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "C", [[create(loginid)]])
+            st.balloons()
+            st.toast("Signed up, redirecting to login..")
+            time.sleep(2)
+            st.switch_page('main.py')
+        else:
+            st.toast("Password must be at least 8 characters long and contain at least one number.")

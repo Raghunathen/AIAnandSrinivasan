@@ -21,15 +21,6 @@ st.markdown(
 genai.configure(api_key='')
 model = genai.GenerativeModel('gemini-pro')
 
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-import google.generativeai as genai
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-
-# ... (other imports)
-
 def load_data(credentials_file='credentials.json'):
     try:
         # Load Google Sheets API credentials
@@ -82,7 +73,8 @@ def main():
     st.plotly_chart(fig2)
 
     # Generate content using the generative model
-    response = model.generate_content(f"Read the following data and provide valuable insights. The first table is profit/gains/salary, and the second table is spendings.\n\nProfit Data:\n{profit_df}\n\nSpendings Data:\n{spendings_df}")
+    with st.spinner("Analyzing given data with AI model.."):
+        response = model.generate_content(f"Read the following data and provide valuable insights. The first table is profit/gains/salary, and the second table is spendings.\n\nProfit Data:\n{profit_df}\n\nSpendings Data:\n{spendings_df}")
     st.write(response.text)
 
 if __name__ == "__main__":
