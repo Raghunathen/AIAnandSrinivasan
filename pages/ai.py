@@ -19,7 +19,7 @@ st.markdown(
 
 
 
-genai.configure(api_key='insert_api_key')
+genai.configure(api_key='')
 model = genai.GenerativeModel('gemini-pro')
 
 
