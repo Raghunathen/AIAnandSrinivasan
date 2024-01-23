@@ -20,7 +20,7 @@ st.markdown(
 
 
 
-def create(title, credentials_file='credentials.json'):
+def create(title, credentials_file=st.secrets('credentials')):
     try:
         credentials = service_account.Credentials.from_service_account_file(
             credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets']

@@ -27,7 +27,7 @@ if a:
 if b:
     st.switch_page('main.py')     
 
-def load_profit_data(credentials_file='credentials.json'):
+def load_profit_data(credentials_file=st.secrets('credentials')):
     try:
         # Load Google Sheets API credentials
         credentials = service_account.Credentials.from_service_account_file(
@@ -57,7 +57,7 @@ def load_profit_data(credentials_file='credentials.json'):
         st.error(f"Error reading profit data from Google Spreadsheet: {e}")
         st.stop()
 
-def load_loss_data(credentials_file='credentials.json'):
+def load_loss_data(credentials_file=st.secrets('credentials')):
     try:
         # Load Google Sheets API credentials
         credentials = service_account.Credentials.from_service_account_file(
