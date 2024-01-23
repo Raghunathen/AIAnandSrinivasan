@@ -3,7 +3,7 @@ import google.auth
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-def find_row_by_value(spreadsheet_id, sheet_name, column, target_value, credentials_file=st.secrets('credentials')):
+def find_row_by_value(spreadsheet_id, sheet_name, column, target_value, credentials_file=st.secrets['credentials']):
     try:
         credentials = service_account.Credentials.from_service_account_file(
             credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -47,7 +47,7 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
-def get_value_at_cell(spreadsheet_id, sheet_name, row, column, credentials_file=st.secrets('credentials')):
+def get_value_at_cell(spreadsheet_id, sheet_name, row, column, credentials_file=st.secrets['credentials']):
     """
     Gets the value at a given row and column in a Google Sheets spreadsheet.
     """
