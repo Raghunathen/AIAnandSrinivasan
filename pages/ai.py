@@ -17,7 +17,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-genai.configure(api_key='')
+genai.configure(st.secrets('api_key'))
 model = genai.GenerativeModel('gemini-pro')
 
 st.title('Insights')
@@ -33,7 +33,7 @@ if a:
 if b:
     st.switch_page('main.py')       
 
-def load_data(credentials_file='credentials.json'):
+def load_data(credentials_file=st.secrets('credentials')):
     try:
         # Load Google Sheets API credentials
         credentials = service_account.Credentials.from_service_account_file(
