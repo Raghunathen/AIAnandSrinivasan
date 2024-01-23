@@ -4,6 +4,7 @@ import plotly.express as px
 import google.generativeai as genai
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+import json
 
 st.set_page_config(page_title="Insights", initial_sidebar_state="collapsed")
 st.markdown(
@@ -33,10 +34,11 @@ if a:
 if b:
     st.switch_page('main.py')       
 
-def load_data(credentials_file=st.secrets['credentials']):
+def load_data(credentials_file=dict(st.secrets['credentials'])):
+    credentials_file = json.loads(json.dumps(credentials_file))
     try:
         # Load Google Sheets API credentials
-        credentials = service_account.Credentials.from_service_account_file(
+        credentials = service_account.Credentials.from_service_account_info(
             credentials_file,
             scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
         )
@@ -79,10 +81,6 @@ def main():
     # Convert data to DataFrames
     profit_df = pd.DataFrame(profit_data, columns=["Amount", "Date"])
     spendings_df = pd.DataFrame(spendings_data, columns=["Amount", "Date", "Categories"])
-
-    # Pie Chart for Profit
-    fig1 = px.pie(profit_df, values="Amount", names="Date", title="Profit", hole=0.4)
-    st.plotly_chart(fig1)
 
     # Bar Chart for Loss by Category
     fig2 = px.bar(spendings_df, x="Categories", y="Amount", title="Loss by Category")

@@ -2,11 +2,14 @@ import streamlit as st
 import google.auth
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+import json
 
-def find_row_by_value(spreadsheet_id, sheet_name, column, target_value, credentials_file=st.secrets['credentials']):
+def find_row_by_value(spreadsheet_id, sheet_name, column, target_value, credentials_toml=st.secrets['credentials']):
+    credentials_dict = dict(credentials_toml)
+    credentials_json = json.loads(json.dumps(credentials_dict))
     try:
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_json, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
         )
         service = build("sheets", "v4", credentials=credentials)
 
@@ -47,13 +50,15 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
-def get_value_at_cell(spreadsheet_id, sheet_name, row, column, credentials_file=st.secrets['credentials']):
+def get_value_at_cell(spreadsheet_id, sheet_name, row, column, credentials_toml=st.secrets['credentials']):
     """
     Gets the value at a given row and column in a Google Sheets spreadsheet.
     """
+    credentials_dict = dict(credentials_toml)
+    credentials_json = json.loads(json.dumps(credentials_dict))
     try:
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_json, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
         )
         service = build("sheets", "v4", credentials=credentials)
 

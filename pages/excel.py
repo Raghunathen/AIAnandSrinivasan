@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+import json
 
 st.set_page_config(page_title="Raw Data", initial_sidebar_state="collapsed")
 st.markdown(
@@ -29,9 +30,12 @@ if b:
 
 def load_profit_data(credentials_file=st.secrets['credentials']):
     try:
+        credentials_file=st.secrets['credentials']
+        credentials_dict = dict(credentials_file)
+        credentials_json = json.loads(json.dumps(credentials_dict))
         # Load Google Sheets API credentials
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_file,
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_json,
             scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
         )
 
@@ -59,9 +63,11 @@ def load_profit_data(credentials_file=st.secrets['credentials']):
 
 def load_loss_data(credentials_file=st.secrets['credentials']):
     try:
+        credentials_dict = dict(credentials_file)
+        credentials_json = json.loads(json.dumps(credentials_dict))
         # Load Google Sheets API credentials
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_file,
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_json,
             scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
         )
 

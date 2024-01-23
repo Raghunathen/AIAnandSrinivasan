@@ -4,7 +4,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-import time
+import time, json
 
 st.set_page_config(page_title="Signup", initial_sidebar_state="collapsed")
 st.markdown(
@@ -21,9 +21,11 @@ st.markdown(
 
 
 def create(title, credentials_file=st.secrets['credentials']):
+    credentials_dict = dict(credentials_file)
+    credentials_json = json.loads(json.dumps(credentials_dict))
     try:
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets']
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_json, scopes=['https://www.googleapis.com/auth/spreadsheets']
         )
         service = build("sheets", "v4", credentials=credentials)
 
@@ -49,8 +51,10 @@ def create(title, credentials_file=st.secrets['credentials']):
 
 def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
     # Load the credentials from the JSON file obtained from the Google API Console
-    credentials_file = 'credentials.json'  # Replace with the path to your credentials file
-    credentials = service_account.Credentials.from_service_account_file(credentials_file, scopes=['https://www.googleapis.com/auth/spreadsheets'])
+    credentials_file=st.secrets['credentials']
+    credentials_dict = dict(credentials_file)
+    credentials_json = json.loads(json.dumps(credentials_dict))
+    credentials = service_account.Credentials.from_service_account_info(credentials_json, scopes=['https://www.googleapis.com/auth/spreadsheets'])
     
     # Build the Google Sheets API service
     service = build('sheets', 'v4', credentials=credentials)
@@ -79,10 +83,12 @@ def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
     print('Appended values successfully.')
 
 def is_value_in_column(spreadsheet_id, sheet_name, column_name, target_value):
-    credentials_file ='credentials.json'
+    credentials_file=st.secrets['credentials']
+    credentials_dict = dict(credentials_file)
+    credentials_json = json.loads(json.dumps(credentials_dict))
     # Load Google Sheets API credentials
-    credentials = service_account.Credentials.from_service_account_file(
-        credentials_file,
+    credentials = service_account.Credentials.from_service_account_info(
+        credentials_json,
         scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
     )
 

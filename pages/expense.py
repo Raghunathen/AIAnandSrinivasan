@@ -2,7 +2,7 @@ import streamlit as st
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
-import datetime
+import json
 def format_date(date):
     return date.strftime("%Y-%m-%d")
 
@@ -31,9 +31,11 @@ if b:
     st.switch_page('main.py')     
 
 def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
-    credentials_file = st.secrets['credentials']
-    credentials = service_account.Credentials.from_service_account_file(
-        credentials_file, 
+    credentials_file=st.secrets['credentials']
+    credentials_dict = dict(credentials_file)
+    credentials_json = json.loads(json.dumps(credentials_dict))
+    credentials = service_account.Credentials.from_service_account_info(
+        credentials_json, 
         scopes=['https://www.googleapis.com/auth/spreadsheets']
     )
 
