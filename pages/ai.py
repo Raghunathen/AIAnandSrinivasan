@@ -91,8 +91,5 @@ def main():
         response = model.generate_content(f"Read the following data and provide valuable insights. The first table is profit/gains/salary, and the second table is spendings. ALL THE DATA IS INR \n\nProfit Data:\n{profit_df}\n\nSpendings Data:\n{spendings_df}")
     st.write(response.text)
 
-    # Add Home Button to navigate to the dashboard
-
-
 if __name__ == "__main__":
     main()
