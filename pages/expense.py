@@ -129,10 +129,6 @@ def main():
         st.write("Amount:", spending_amount)
         st.write("Date:", format_date(spending_date))
         st.write("Category:", spending_category)
-
-    insights_button = st.button("INSIGHTS", key="insights_button", help="Click for insights")
-    if insights_button:
-        st.switch_page('pages/ai.py')
     
 if __name__ == "__main__":
     main()
