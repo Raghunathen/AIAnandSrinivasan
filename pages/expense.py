@@ -31,7 +31,7 @@ if b:
     st.switch_page('main.py')     
 
 def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
-    credentials_file = 'credentials.json'
+    credentials_file = st.secrets['credentials']
     credentials = service_account.Credentials.from_service_account_file(
         credentials_file, 
         scopes=['https://www.googleapis.com/auth/spreadsheets']
