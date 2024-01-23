@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import time
 
-st.set_page_config(initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Signup", initial_sidebar_state="collapsed")
 st.markdown(
     """
 <style>
@@ -18,10 +18,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title('Signup to aiAS')
 
-loginid = st.text_input("Enter a userid")
-password = st.text_input("Enter a password", type="password")
 
 def create(title, credentials_file='credentials.json'):
     try:
@@ -49,7 +46,7 @@ def create(title, credentials_file='credentials.json'):
     except Exception as error:
         print(f"An error occurred: {error}")
         return None
-a = st.button("Signup")
+
 def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
     # Load the credentials from the JSON file obtained from the Google API Console
     credentials_file = 'credentials.json'  # Replace with the path to your credentials file
@@ -115,19 +112,28 @@ def is_password_standard(password):
     if not any(char.isdigit() for char in password):
         return False
     return True
-    
-if a:
+
+
+st.title('Signup to aiAnandSri')
+loginid = st.text_input("Enter a userid")
+password = st.text_input("Enter a password", type="password")
+
+# Signup button
+if st.button("Signup"):
     if is_value_in_column("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", "Sheet1", "A", loginid):
-        st.toast("Login ID EXISTS, Try a different one")
+        st.warning("Login ID EXISTS, Try a different one")
     else:
         if is_password_standard(password):
-            
+            # Perform signup actions
             append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "A", [[loginid]])
             append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "B", [[password]])
             append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "C", [[create(loginid)]])
+
+            # Display success message and perform redirect
             st.balloons()
-            st.toast("Signed up, redirecting to login..")
+            st.success("Signed up successfully!")
+            st.info("Redirecting to login...")
             time.sleep(2)
             st.switch_page('main.py')
         else:
-            st.toast("Password must be at least 8 characters long and contain at least one number.")
+            st.warning("Password must be at least 8 characters long and contain at least one number.")

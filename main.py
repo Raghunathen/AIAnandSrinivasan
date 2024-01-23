@@ -36,7 +36,7 @@ def find_row_by_value(spreadsheet_id, sheet_name, column, target_value, credenti
 
 
 
-st.set_page_config(initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Login", initial_sidebar_state="collapsed")
 st.markdown(
     """
 <style>
@@ -75,41 +75,36 @@ def get_value_at_cell(spreadsheet_id, sheet_name, row, column, credentials_file=
         print(f"An error occurred: {error}")
         return None
 
+
+
+# Page title and input fields
 st.title('Login to aiAnandSrinivasan')
-
-#dd/mm/yyyy
-
-
 loginid = st.text_input("Enter a userid")
 password = st.text_input("Enter a password", type="password")
 
-
-
-col1, col2 = st.columns([1,1])
-
+# Login and Signup buttons in a two-column layout
+col1, col2 = st.columns([1, 0.13])
 with col1:
-    a = st.button("Login")
-with col2:
-    b = st.button("Signup")
+    if st.button("Login"):
+        spreadsheet_id = '1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50'
+        sheet_name = 'Sheet1'
+        column = 'A'
+        row_number = find_row_by_value(spreadsheet_id, sheet_name, column, loginid)
 
-spreadsheet_id = '1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50'
-sheet_name = 'Sheet1'
-column = 'A' 
+        if row_number is not None:
+            stored_password = get_value_at_cell(spreadsheet_id, sheet_name, row_number, "B")
 
-
-
-if a:
-    row_number = find_row_by_value(spreadsheet_id, sheet_name, column, loginid)
-    if row_number is not None:
-        pw = get_value_at_cell(spreadsheet_id, sheet_name, row_number, "B")
-        if pw == password:
-            st.session_state['userid'] = loginid
-            st.session_state['person_url'] = get_value_at_cell(spreadsheet_id, sheet_name, row_number, "C")
-            st.switch_page("pages/expense.py")
+            if stored_password == password:
+                st.session_state['userid'] = loginid
+                st.session_state['person_url'] = get_value_at_cell(spreadsheet_id, sheet_name, row_number, "C")
+                st.balloons()
+                st.success("Login successful!")
+                st.switch_page("pages/dashboard.py")
+            else:
+                st.warning("Wrong Password. Please try again.")
         else:
-            st.toast("Wrong Password")
+            st.warning("Username doesn't exist. Please sign up.")
     else:
-        st.toast("username doesnt exist, signup")
-        print("Target value not found in the specified column.")
-if b:
-    st.switch_page("pages/signup.py")
+        with col2:
+            if st.button("Signup"):
+                st.switch_page("pages/signup.py")

@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import google.generativeai as genai
-import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
-st.set_page_config(initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Insights", initial_sidebar_state="collapsed")
 st.markdown(
     """
 <style>
@@ -20,6 +19,19 @@ st.markdown(
 
 genai.configure(api_key='')
 model = genai.GenerativeModel('gemini-pro')
+
+st.title('Insights')
+col1, col2 = st.columns([1, 0.13])
+
+with col1:
+    a = st.button("Home")
+with col2:
+    b = st.button("Logout")
+    
+if a:
+    st.switch_page('pages/dashboard.py')
+if b:
+    st.switch_page('main.py')       
 
 def load_data(credentials_file='credentials.json'):
     try:
@@ -60,22 +72,29 @@ def load_data(credentials_file='credentials.json'):
         st.stop()
 
 def main():
-    st.title('aiAnandSrinivasan')
+    
 
     profit_data, spendings_data = load_data()
 
     # Convert data to DataFrames
-    profit_df = pd.DataFrame(profit_data, columns=["Amount", "Date"])  # Replace "Column_Name" with the actual name of the column
+    profit_df = pd.DataFrame(profit_data, columns=["Amount", "Date"])
     spendings_df = pd.DataFrame(spendings_data, columns=["Amount", "Date", "Categories"])
 
-    # Pie Chart for Spendings
-    fig2 = px.pie(spendings_df, values="Amount", names="Categories", title="Spendings", hole=0.4)
+    # Pie Chart for Profit
+    fig1 = px.pie(profit_df, values="Amount", names="Date", title="Profit", hole=0.4)
+    st.plotly_chart(fig1)
+
+    # Bar Chart for Loss by Category
+    fig2 = px.bar(spendings_df, x="Categories", y="Amount", title="Loss by Category")
     st.plotly_chart(fig2)
 
     # Generate content using the generative model
     with st.spinner("Analyzing given data with AI model.."):
-        response = model.generate_content(f"Read the following data and provide valuable insights. The first table is profit/gains/salary, and the second table is spendings.\n\nProfit Data:\n{profit_df}\n\nSpendings Data:\n{spendings_df}")
+        response = model.generate_content(f"Read the following data and provide valuable insights. The first table is profit/gains/salary, and the second table is spendings. ALL THE DATA IS INR \n\nProfit Data:\n{profit_df}\n\nSpendings Data:\n{spendings_df}")
     st.write(response.text)
+
+    # Add Home Button to navigate to the dashboard
+
 
 if __name__ == "__main__":
     main()

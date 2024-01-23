@@ -6,7 +6,7 @@ import datetime
 def format_date(date):
     return date.strftime("%Y-%m-%d")
 
-st.set_page_config(initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Record Data", initial_sidebar_state="collapsed")
 st.markdown(
     """
 <style>
@@ -17,6 +17,18 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+
+col1, col2 = st.columns([1, 0.13])
+st.title("Record Spendings")
+with col1:
+    a = st.button("Home")
+with col2:
+    b = st.button("Logout")
+    
+if a:
+    st.switch_page('pages/dashboard.py')
+if b:
+    st.switch_page('main.py')     
 
 def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
     credentials_file = 'credentials.json'
@@ -55,7 +67,7 @@ def append_to_spreadsheet(spreadsheet_id, sheet_name, column, values):
 
 
 def main():
-    st.title("aiAnandSrinivasan")
+    
     st.write("wait till you get submitted notification, before submitting another")
     
 
