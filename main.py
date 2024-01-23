@@ -91,7 +91,7 @@ password = st.text_input("Enter a password", type="password")
 col1, col2 = st.columns([1, 0.13])
 with col1:
     if st.button("Login"):
-        spreadsheet_id = '1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50'
+        spreadsheet_id = st.secrets("user_pass")
         sheet_name = 'Sheet1'
         column = 'A'
         row_number = find_row_by_value(spreadsheet_id, sheet_name, column, loginid)

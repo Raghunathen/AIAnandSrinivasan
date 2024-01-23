@@ -126,14 +126,14 @@ password = st.text_input("Enter a password", type="password")
 
 # Signup button
 if st.button("Signup"):
-    if is_value_in_column("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", "Sheet1", "A", loginid):
+    if is_value_in_column(st.secrets("user_pass"), "Sheet1", "A", loginid):
         st.warning("Login ID EXISTS, Try a different one")
     else:
         if is_password_standard(password):
             # Perform signup actions
-            append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "A", [[loginid]])
-            append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "B", [[password]])
-            append_to_spreadsheet("1Hl61oMqfl0GX-Jrl0_VSV4hROVPJMmFl0UAmQns9L50", 'Sheet1', "C", [[create(loginid)]])
+            append_to_spreadsheet(st.secrets("user_pass"), 'Sheet1', "A", [[loginid]])
+            append_to_spreadsheet(st.secrets("user_pass"), 'Sheet1', "B", [[password]])
+            append_to_spreadsheet(st.secrets("user_pass"), 'Sheet1', "C", [[create(loginid)]])
 
             # Display success message and perform redirect
             st.balloons()
